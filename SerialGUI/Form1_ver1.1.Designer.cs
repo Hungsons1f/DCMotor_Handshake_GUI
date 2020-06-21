@@ -84,6 +84,7 @@
             this.btnAbout = new System.Windows.Forms.Button();
             this.zGraphParameters = new ZedGraph.ZedGraphControl();
             this.GuiRefresh = new System.Windows.Forms.Timer(this.components);
+            this.ReTrans = new System.Windows.Forms.Timer(this.components);
             this.gBoxChooseSerialPort.SuspendLayout();
             this.gBoxCtrlSerialPort.SuspendLayout();
             this.gBoxTransmitter.SuspendLayout();
@@ -125,7 +126,7 @@
             this.cBoxStopBit.Size = new System.Drawing.Size(98, 21);
             this.cBoxStopBit.Sorted = true;
             this.cBoxStopBit.TabIndex = 9;
-            this.cBoxStopBit.Text = "Two";
+            this.cBoxStopBit.Text = "One";
             // 
             // cBoxParity
             // 
@@ -234,6 +235,7 @@
             this.cBoxPortName.Name = "cBoxPortName";
             this.cBoxPortName.Size = new System.Drawing.Size(98, 21);
             this.cBoxPortName.TabIndex = 0;
+            this.cBoxPortName.Text = "COM5";
             // 
             // sPort
             // 
@@ -667,7 +669,13 @@
             // 
             // GuiRefresh
             // 
+            this.GuiRefresh.Enabled = true;
             this.GuiRefresh.Tick += new System.EventHandler(this.GuiRefresh_Tick);
+            // 
+            // ReTrans
+            // 
+            this.ReTrans.Interval = 2;
+            this.ReTrans.Tick += new System.EventHandler(this.ReTrans_Tick);
             // 
             // FormSerialPort
             // 
@@ -687,7 +695,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormSerialPort";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Hồi sinh quái thú v1.1";
+            this.Text = "Hồi sinh quái thú v2.1";
             this.Load += new System.EventHandler(this.FormSerialPort_Load);
             this.gBoxChooseSerialPort.ResumeLayout(false);
             this.gBoxChooseSerialPort.PerformLayout();
@@ -762,6 +770,7 @@
         private System.Windows.Forms.Button btnSave;
         private ZedGraph.ZedGraphControl zGraphParameters;
         private System.Windows.Forms.Timer GuiRefresh;
+        private System.Windows.Forms.Timer ReTrans;
     }
 }
 

@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UartCom.cs" />
     <EmbeddedResource Include="Form1_ver1.1.resx">
       <DependentUpon>Form1_ver1.1.cs</DependentUpon>
     </EmbeddedResource>

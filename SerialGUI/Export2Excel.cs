@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 
-namespace SerialGUI
+namespace Export2Excelx
 {
     class Export2Excel
     {
