@@ -146,28 +146,6 @@ namespace SerialGUI
             }
         }
 
-        private void btnSend_Click(object sender, EventArgs e)
-        {
-            if (sPort.IsOpen)
-            {
-                try
-                {
-                    sPort.WriteTimeout = 5000;
-                    OutBuffer = tBoxDisplaySend.Text;
-                    sPort.Write(OutBuffer);
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message, "Error!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //throw;
-                }
-            }
-            else
-            {
-                MessageBox.Show("Connect Serial port first!", "Error!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void btnClearGet_Click(object sender, EventArgs e)
         {
             tBoxDisplayGet.Text = null;
@@ -180,10 +158,14 @@ namespace SerialGUI
                 case GraphStatus.GraphRun:
                     status = GraphStatus.GraphStop;
                     btnGraph.Text = "Graph";
+                    lbGraph.Text = "NOT";
+                    lbGraph.ForeColor = Color.Red;
                     break;
                 case GraphStatus.GraphStop:
                     status = GraphStatus.GraphRun;
                     btnGraph.Text = "NotGraph";
+                    lbGraph.Text = "GRAPH";
+                    lbGraph.ForeColor = Color.Blue;
                     break;
                 default:
                     break;
@@ -365,10 +347,14 @@ namespace SerialGUI
                 case UartCom.DataHeader.Run:
                     tBoxDisplayGet.Text += UartCom.motorMessage[0];
                     tBoxDisplayGet.Text += Environment.NewLine;
+                    lbRun.Text = "RUN";
+                    lbRun.ForeColor = Color.Green;
                     break;
                 case UartCom.DataHeader.Stop:
                     tBoxDisplayGet.Text += UartCom.motorMessage[1];
                     tBoxDisplayGet.Text += Environment.NewLine;
+                    lbRun.Text = "STOP";
+                    lbRun.ForeColor = Color.Red;
                     break;
                 case UartCom.DataHeader.Velocity:
                     tBoxDisplayGet.Text += UartCom.motorMessage[2];
