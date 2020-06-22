@@ -639,45 +639,49 @@ namespace SerialGUI
             try
             {
                 clearGraph();
-                if (rBtnVelocity.Checked)
+                RadioButton rb = sender as RadioButton;
+                if (rb.Checked)
                 {
-                    lbVelocity.Text = "Velocity";
-                    tbCalib.Text = "4.8";
-
-                    GraphPane myPane = zGrphPlotData.GraphPane;
-                    myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
-                    myPane.YAxis.Scale.Max = 2500;
-                    myPane.AxisChange();
-
-                    //byte[] temp = new byte[1];
-                    //temp[0] = (byte)UartCom.controlHeader.Velocity;
-                    //sPort.Write(temp, 0, 1);
-                    byte[] setPointBuffer;
-                    if (UartCom.TxHandshake(UartCom.ControlHeader.Velocity, "0", out setPointBuffer))
+                    if (rBtnVelocity.Checked)
                     {
-                        sPort.Write(setPointBuffer, 0, 7);
+                        lbVelocity.Text = "Velocity";
+                        tbCalib.Text = "4.8";
+
+                        GraphPane myPane = zGrphPlotData.GraphPane;
+                        myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
+                        myPane.YAxis.Scale.Max = 2500;
+                        myPane.AxisChange();
+
+                        //byte[] temp = new byte[1];
+                        //temp[0] = (byte)UartCom.controlHeader.Velocity;
+                        //sPort.Write(temp, 0, 1);
+                        byte[] setPointBuffer;
+                        if (UartCom.TxHandshake(UartCom.ControlHeader.Velocity, "0", out setPointBuffer))
+                        {
+                            sPort.Write(setPointBuffer, 0, 7);
+                        }
+                        ReTrans.Enabled = true;
                     }
-                    ReTrans.Enabled = true;
-                }
-                else
-                {
-                    lbVelocity.Text = "Position";
-                    tbCalib.Text = "40";
-
-                    GraphPane myPane = zGrphPlotData.GraphPane;
-                    myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
-                    myPane.YAxis.Scale.Max = 600;
-                    myPane.AxisChange();
-
-                    //byte[] temp = new byte[1];
-                    //temp[0] = (byte)UartCom.controlHeader.Position;
-                    //sPort.Write(temp, 0, 1);      
-                    byte[] setPointBuffer;
-                    if (UartCom.TxHandshake(UartCom.ControlHeader.Position, "0", out setPointBuffer))
+                    else
                     {
-                        sPort.Write(setPointBuffer, 0, 7);
+                        lbVelocity.Text = "Position";
+                        tbCalib.Text = "40";
+
+                        GraphPane myPane = zGrphPlotData.GraphPane;
+                        myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
+                        myPane.YAxis.Scale.Max = 600;
+                        myPane.AxisChange();
+
+                        //byte[] temp = new byte[1];
+                        //temp[0] = (byte)UartCom.controlHeader.Position;
+                        //sPort.Write(temp, 0, 1);      
+                        byte[] setPointBuffer;
+                        if (UartCom.TxHandshake(UartCom.ControlHeader.Position, "0", out setPointBuffer))
+                        {
+                            sPort.Write(setPointBuffer, 0, 7);
+                        }
+                        ReTrans.Enabled = true;
                     }
-                    ReTrans.Enabled = true;
                 }
             }
             catch (Exception err)

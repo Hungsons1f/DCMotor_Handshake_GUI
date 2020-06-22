@@ -129,9 +129,7 @@ namespace UartCommunication
                 temp[6] = (byte)FrameHeader.ETX;
                 buffer = temp;
                 return true;
-            }
-
-            
+            }        
         }
 
         /*Instruction processing methods ------------------------------------------------------------------------------------------------------------------------*/
