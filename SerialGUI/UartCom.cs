@@ -13,7 +13,10 @@ namespace UartCommunication
         /*Control variables ------------------------------------------------------------------------------------------------------------------------*/
         public static bool rxack = true;
         public static bool rxnak = false;
+        public static bool rxack_16byte = true;
+        public static bool rxnak_16byte = true;
         public static byte[] txbuf = new byte[5];
+        public static byte[] rxbuf = new byte[16];
 
         /*Instruction enums ------------------------------------------------------------------------------------------------------------------------*/
         public enum DataHeader
@@ -23,14 +26,14 @@ namespace UartCommunication
             Run = 0x11, Stop = 0x12, Velocity = 0x13, Position = 0x14, Setpoint = 0x15, Realtime = 0x16,
             Kp = 0x17, Ki = 0x18, Kd = 0x19,
             Calib = 0x31,
-            Nak = 0xF0
+            Nak = 0xF0, Ack = 0xF1
         };
         public enum ControlHeader
         {
             Run = 0x11, Stop = 0x12, Velocity = 0x13, Position = 0x14, Setpoint = 0x15, Realtime = 0x16,
             Kp = 0x17, Ki = 0x18, Kd = 0x19,
             Calib = 0x31,
-            Nak = 0xF0
+            Nak = 0xF0, Ack = 0xF1
         };
         enum FrameHeader { STX = 0xFE, ETX = 0xFF, DLE = 0xFD };
 
@@ -84,6 +87,43 @@ namespace UartCommunication
             }
 
         }
+        public static bool RxHandshake_16byte(byte[] inByte, out byte[] instruction)
+        {
+            byte[] temp = new byte[16];
+            if ((FrameHeader)inByte[0] != FrameHeader.STX)
+            {
+                rxnak_16byte = true;
+            }
+            if ((FrameHeader)inByte[16] != FrameHeader.ETX)
+            {
+                rxnak_16byte = true;
+            }
+            if (!rxnak_16byte)
+            {
+                for (int ii = 0; ii <= 13; ii++) 
+                    temp[ii] = inByte[ii + 1];
+
+                //if (temp.SequenceEqual(txbuf))
+                //{
+                    rxack_16byte = true;
+                    instruction = temp;
+                    rxbuf = temp;
+                    return true;
+                //}
+                //else
+                //{
+                //    rxnak = true;
+                //    instruction = null;
+                //    return false;
+                //}
+            }
+            else
+            {
+                instruction = null;
+                return false;
+            }
+
+        }
 
         public static bool TxHandshake (ControlHeader header, string text, out byte[] buffer)
         {
@@ -108,6 +148,45 @@ namespace UartCommunication
                 return false;
             }
         }
+        public static bool TxHandshake_16byte(out byte[] buffer)
+        {
+            if (rxack_16byte)
+            {
+                //txbuf = headerEncapsulation(header, text);
+                byte[] temp = new byte[4];
+                temp[0] = (byte)FrameHeader.STX;
+                //for (int i = 1; i <= 5; i++)
+                //{
+                //    temp[i] = txbuf[i - 1];
+                //}
+                temp[1] = (byte)DataHeader.Ack;
+                temp[2] = rxbuf[13];
+                temp[3] = (byte)FrameHeader.ETX;
+                buffer = temp;
+                rxack_16byte = false;
+                return true;
+            }
+            else
+            {
+                //buffer = null;
+                //MessageBox.Show("A transmission is ongoing", "Error!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //return false;
+
+                //txbuf = headerEncapsulation(header, text);
+                byte[] temp = new byte[4];
+                temp[0] = (byte)FrameHeader.STX;
+                //for (int i = 1; i <= 5; i++)
+                //{
+                //    temp[i] = txbuf[i - 1];
+                //}
+                temp[1] = (byte)DataHeader.Nak;
+                temp[2] = rxbuf[13];
+                temp[3] = (byte)FrameHeader.ETX;
+                buffer = temp;
+                rxack_16byte = false;
+                return true;
+            }
+        }
 
         public static bool ReHandshake (out byte[] buffer)
         {
@@ -129,7 +208,9 @@ namespace UartCommunication
                 temp[6] = (byte)FrameHeader.ETX;
                 buffer = temp;
                 return true;
-            }        
+            }
+
+            
         }
 
         /*Instruction processing methods ------------------------------------------------------------------------------------------------------------------------*/
