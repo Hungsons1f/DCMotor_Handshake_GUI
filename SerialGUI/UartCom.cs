@@ -35,7 +35,7 @@ namespace UartCommunication
             Calib = 0x31,
             Nak = 0xF0, Ack = 0xF1
         };
-        enum FrameHeader { STX = 0xFE, ETX = 0xFF, DLE = 0xFD };
+        public enum FrameHeader { STX = 0xFE, ETX = 0xFF, STX16 = 0xFD };
 
         public static string[] motorMessage =
         {

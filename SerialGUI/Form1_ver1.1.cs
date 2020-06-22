@@ -302,7 +302,7 @@ namespace SerialGUI
                 //readBuffer(ref inByte);//inBuffer);
                 //sPort.Read(inByte, 0, 5);
                 InByte[0] = Convert.ToByte(sPort.ReadByte());
-                if ((UartCom.FrameHeader)InByte[0] == UartCom.FrameHeader.STX7)
+                if ((UartCom.FrameHeader)InByte[0] == UartCom.FrameHeader.STX)
                 {
                     for (int ii = 1; ii < 7; ii++)
                     {
@@ -310,15 +310,15 @@ namespace SerialGUI
                     }
                     this.Invoke(new EventHandler(saveData));
                 }
-                else if ((UartCom.FrameHeader)InByte[0] == UartCom.FrameHeader.STX16)
-                {
-                    InByte_16[0] = InByte[0];
-                    for (int ii = 1; ii < 16; ii++)
-                    {
-                        InByte_16[ii] = Convert.ToByte(sPort.ReadByte());
-                    }
-                    this.Invoke(new EventHandler(saveAndSendAck));
-                }
+                //else if ((UartCom.FrameHeader)InByte[0] == UartCom.FrameHeader.STX16)
+                //{
+                //    InByte_16[0] = InByte[0];
+                //    for (int ii = 1; ii < 16; ii++)
+                //    {
+                //        InByte_16[ii] = Convert.ToByte(sPort.ReadByte());
+                //    }
+                //    this.Invoke(new EventHandler(saveAndSendAck));
+                //}
                 
                 
             }
@@ -335,14 +335,14 @@ namespace SerialGUI
 
             if (!UartCom.RxHandshake_16byte(InByte_16, out instruction))
                 return;
-            UartCom.DataHeader header = UartCom.classifyHeader_16byte(instruction, out dataWithoutHeader_1, out dataWithoutHeader_2, out dataWithoutHeader_3);
-            float displayValue1 = UartCom.uARTBytetoFloat(dataWithoutHeader_1); //realtime
-            float displayValue2 = UartCom.uARTBytetoFloat(dataWithoutHeader_2); //measure
-            float displayValue3 = UartCom.uARTBytetoFloat(dataWithoutHeader_3); //PWM
+            //UartCom.DataHeader header = UartCom.classifyHeader_16byte(instruction, out dataWithoutHeader_1, out dataWithoutHeader_2, out dataWithoutHeader_3);
+            //float displayValue1 = UartCom.uARTBytetoFloat(dataWithoutHeader_1); //realtime
+            //float displayValue2 = UartCom.uARTBytetoFloat(dataWithoutHeader_2); //measure
+            //float displayValue3 = UartCom.uARTBytetoFloat(dataWithoutHeader_3); //PWM
 
-            Realtime = displayValue1;
-            Measure = displayValue2;
-            PWM = displayValue3;
+            //Realtime = displayValue1;
+            //Measure = displayValue2;
+            //PWM = displayValue3;
 
             if (status == GraphStatus.GraphRun)
             {
@@ -668,47 +668,53 @@ namespace SerialGUI
             try
             {
                 clearGraph();
-                if (rBtnVelocity.Checked)
+                RadioButton rb = sender as RadioButton;
+                if (rb.Checked)
                 {
-                    lbVelocity.Text = "Velocity";
-                    tbCalib.Text = "4.8";
-
-                    GraphPane myPane = zGrphPlotData.GraphPane;
-                    myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
-                    myPane.YAxis.Scale.Max = 2500;
-                    myPane.AxisChange();
-
-                    //byte[] temp = new byte[1];
-                    //temp[0] = (byte)UartCom.controlHeader.Velocity;
-                    //sPort.Write(temp, 0, 1);
-                    byte[] setPointBuffer;
-                    if (UartCom.TxHandshake(UartCom.ControlHeader.Velocity, "0", out setPointBuffer))
+                    if (rBtnVelocity.Checked)
                     {
-                        sPort.Write(setPointBuffer, 0, 7);
+                        lbVelocity.Text = "Velocity";
+                        tbCalib.Text = "4.8";
+
+                        GraphPane myPane = zGrphPlotData.GraphPane;
+                        myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
+                        myPane.YAxis.Scale.Max = 2500;
+                        myPane.AxisChange();
+
+                        //byte[] temp = new byte[1];
+                        //temp[0] = (byte)UartCom.controlHeader.Velocity;
+                        //sPort.Write(temp, 0, 1);
+                        byte[] setPointBuffer;
+                        if (UartCom.TxHandshake(UartCom.ControlHeader.Velocity, "0", out setPointBuffer))
+                        {
+                            sPort.Write(setPointBuffer, 0, 7);
+                        }
+                        ReTrans.Enabled = true;
                     }
-                    ReTrans.Enabled = true;
-                }
-                else
-                {
-                    lbVelocity.Text = "Position";
-                    tbCalib.Text = "40";
-
-                    GraphPane myPane = zGrphPlotData.GraphPane;
-                    myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
-                    myPane.YAxis.Scale.Max = 600;
-                    myPane.AxisChange();
-
-                    //byte[] temp = new byte[1];
-                    //temp[0] = (byte)UartCom.controlHeader.Position;
-                    //sPort.Write(temp, 0, 1);      
-                    byte[] setPointBuffer;
-                    if (UartCom.TxHandshake(UartCom.ControlHeader.Position, "0", out setPointBuffer))
+                    else
                     {
-                        sPort.Write(setPointBuffer, 0, 7);
+                        lbVelocity.Text = "Position";
+                        tbCalib.Text = "40";
+
+                        GraphPane myPane = zGrphPlotData.GraphPane;
+                        myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
+                        myPane.YAxis.Scale.Max = 600;
+                        myPane.AxisChange();
+
+                        //byte[] temp = new byte[1];
+                        //temp[0] = (byte)UartCom.controlHeader.Position;
+                        //sPort.Write(temp, 0, 1);      
+                        byte[] setPointBuffer;
+                        if (UartCom.TxHandshake(UartCom.ControlHeader.Position, "0", out setPointBuffer))
+                        {
+                            sPort.Write(setPointBuffer, 0, 7);
+                        }
+                        ReTrans.Enabled = true;
                     }
-                    ReTrans.Enabled = true;
                 }
             }
+
+
             catch (Exception err)
             {
                 MessageBox.Show(err.Message, "Error!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -806,14 +812,28 @@ namespace SerialGUI
 
         }
 
-
+        int fail = 0;
         private void ReTrans_Tick(object sender, EventArgs e)
         {
             byte[] buffer;
             if (UartCom.ReHandshake(out buffer))
             {
-                sPort.Write(buffer, 0, 7);
-                tBoxDisplayGet.Text += ("NAK" + Environment.NewLine);
+                if (fail <= 5)
+                {
+                    sPort.Write(buffer, 0, 7);
+                    tBoxDisplayGet.Text += ("NAK" + Environment.NewLine);
+                    fail++;
+                }
+                else
+                {
+                    fail = 0;
+                    sPort.ReadExisting();
+                    UartCom.rxack = true;
+                    UartCom.rxnak = false;
+                    ReTrans.Enabled = false;
+                    MessageBox.Show("Transmission line is unstable, or Motor is not working" +
+                        "Please re-plug in the cable and reset the Motor", "Error!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
