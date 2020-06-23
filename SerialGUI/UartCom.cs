@@ -16,7 +16,7 @@ namespace UartCommunication
         public static bool rxack_16byte = true;
         public static bool rxnak_16byte = true;
         public static byte[] txbuf = new byte[5];
-        public static byte[] rxbuf = new byte[16];
+        public static byte index = 0;
 
         /*Instruction enums ------------------------------------------------------------------------------------------------------------------------*/
         public enum DataHeader
@@ -90,11 +90,11 @@ namespace UartCommunication
         public static bool RxHandshake_16byte(byte[] inByte, out byte[] instruction)
         {
             byte[] temp = new byte[16];
-            if ((FrameHeader)inByte[0] != FrameHeader.STX)
+            if ((FrameHeader)inByte[0] != FrameHeader.STX16)
             {
                 rxnak_16byte = true;
             }
-            if ((FrameHeader)inByte[16] != FrameHeader.ETX)
+            if ((FrameHeader)inByte[15] != FrameHeader.ETX)
             {
                 rxnak_16byte = true;
             }
@@ -103,19 +103,10 @@ namespace UartCommunication
                 for (int ii = 0; ii <= 13; ii++) 
                     temp[ii] = inByte[ii + 1];
 
-                //if (temp.SequenceEqual(txbuf))
-                //{
-                    rxack_16byte = true;
-                    instruction = temp;
-                    rxbuf = temp;
-                    return true;
-                //}
-                //else
-                //{
-                //    rxnak = true;
-                //    instruction = null;
-                //    return false;
-                //}
+                index = temp[13];
+                rxack_16byte = true;
+                instruction = temp;
+                return true;
             }
             else
             {
@@ -148,43 +139,36 @@ namespace UartCommunication
                 return false;
             }
         }
+
         public static bool TxHandshake_16byte(out byte[] buffer)
         {
             if (rxack_16byte)
             {
-                //txbuf = headerEncapsulation(header, text);
-                byte[] temp = new byte[4];
+                byte[] temp = new byte[7];
                 temp[0] = (byte)FrameHeader.STX;
-                //for (int i = 1; i <= 5; i++)
-                //{
-                //    temp[i] = txbuf[i - 1];
-                //}
                 temp[1] = (byte)DataHeader.Ack;
-                temp[2] = rxbuf[13];
-                temp[3] = (byte)FrameHeader.ETX;
+                temp[2] = 0;
+                temp[3] = 0;
+                temp[4] = 0;
+                temp[5] = index;
+                temp[6] = (byte)FrameHeader.ETX;
                 buffer = temp;
                 rxack_16byte = false;
                 return true;
             }
             else
             {
-                //buffer = null;
-                //MessageBox.Show("A transmission is ongoing", "Error!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //return false;
-
-                //txbuf = headerEncapsulation(header, text);
-                byte[] temp = new byte[4];
+                byte[] temp = new byte[7];
                 temp[0] = (byte)FrameHeader.STX;
-                //for (int i = 1; i <= 5; i++)
-                //{
-                //    temp[i] = txbuf[i - 1];
-                //}
                 temp[1] = (byte)DataHeader.Nak;
-                temp[2] = rxbuf[13];
-                temp[3] = (byte)FrameHeader.ETX;
+                temp[2] = 0;
+                temp[3] = 0;
+                temp[4] = 0;
+                temp[5] = index;
+                temp[6] = (byte)FrameHeader.ETX;
                 buffer = temp;
-                rxack_16byte = false;
-                return true;
+                rxnak_16byte = false;
+                return false;
             }
         }
 
@@ -271,6 +255,25 @@ namespace UartCommunication
             return (DataHeader)inData[0];
         }
 
+        public static DataHeader classifyHeader_16byte(byte[] inData, out byte[] outData_1, out byte[] outData_2, out byte[] outData_3)
+        {
+            outData_1 = new byte[4];
+            outData_2 = new byte[4];
+            outData_3 = new byte[4];
+            outData_3[0] = inData[12];
+            outData_3[1] = inData[11];
+            outData_3[2] = inData[10];
+            outData_3[3] = inData[9];
+            outData_2[0] = inData[8];
+            outData_2[1] = inData[7];
+            outData_2[2] = inData[6];
+            outData_2[3] = inData[5];
+            outData_1[0] = inData[4];
+            outData_1[1] = inData[3];
+            outData_1[2] = inData[2];
+            outData_1[3] = inData[1];
+            return (DataHeader)inData[0];
+        }
         /*Data type changing methods ------------------------------------------------------------------------------------------------------------------------*/
         public static byte[] stringtoUART(string text)
         {

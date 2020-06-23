@@ -83,10 +83,10 @@
             this.GuiRefresh = new System.Windows.Forms.Timer(this.components);
             this.ReTrans = new System.Windows.Forms.Timer(this.components);
             this.gBoxStatus = new System.Windows.Forms.GroupBox();
-            this.lbRun = new System.Windows.Forms.Label();
             this.lbGraph = new System.Windows.Forms.Label();
-            this.lbMotor = new System.Windows.Forms.Label();
+            this.lbRun = new System.Windows.Forms.Label();
             this.lbGraph2 = new System.Windows.Forms.Label();
+            this.lbMotor = new System.Windows.Forms.Label();
             this.lbTitle = new System.Windows.Forms.Label();
             this.gBoxChooseSerialPort.SuspendLayout();
             this.gBoxCtrlSerialPort.SuspendLayout();
@@ -639,7 +639,6 @@
             this.zGraphParameters.Size = new System.Drawing.Size(591, 295);
             this.zGraphParameters.TabIndex = 5;
             this.zGraphParameters.UseExtendedPrintDialog = true;
-            this.zGraphParameters.Visible = false;
             // 
             // GuiRefresh
             // 
@@ -664,18 +663,6 @@
             this.gBoxStatus.TabStop = false;
             this.gBoxStatus.Text = "Status";
             // 
-            // lbRun
-            // 
-            this.lbRun.AutoSize = true;
-            this.lbRun.Font = new System.Drawing.Font("Comic Sans MS", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbRun.ForeColor = System.Drawing.Color.Red;
-            this.lbRun.Location = new System.Drawing.Point(76, 18);
-            this.lbRun.Name = "lbRun";
-            this.lbRun.Size = new System.Drawing.Size(68, 29);
-            this.lbRun.TabIndex = 0;
-            this.lbRun.Text = "STOP";
-            this.lbRun.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // lbGraph
             // 
             this.lbGraph.AutoSize = true;
@@ -688,14 +675,17 @@
             this.lbGraph.Text = "GRAPH";
             this.lbGraph.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbMotor
+            // lbRun
             // 
-            this.lbMotor.AutoSize = true;
-            this.lbMotor.Location = new System.Drawing.Point(7, 26);
-            this.lbMotor.Name = "lbMotor";
-            this.lbMotor.Size = new System.Drawing.Size(37, 13);
-            this.lbMotor.TabIndex = 5;
-            this.lbMotor.Text = "Motor:";
+            this.lbRun.AutoSize = true;
+            this.lbRun.Font = new System.Drawing.Font("Comic Sans MS", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbRun.ForeColor = System.Drawing.Color.Red;
+            this.lbRun.Location = new System.Drawing.Point(76, 18);
+            this.lbRun.Name = "lbRun";
+            this.lbRun.Size = new System.Drawing.Size(68, 29);
+            this.lbRun.TabIndex = 0;
+            this.lbRun.Text = "STOP";
+            this.lbRun.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbGraph2
             // 
@@ -705,6 +695,15 @@
             this.lbGraph2.Size = new System.Drawing.Size(39, 13);
             this.lbGraph2.TabIndex = 5;
             this.lbGraph2.Text = "Graph:";
+            // 
+            // lbMotor
+            // 
+            this.lbMotor.AutoSize = true;
+            this.lbMotor.Location = new System.Drawing.Point(7, 26);
+            this.lbMotor.Name = "lbMotor";
+            this.lbMotor.Size = new System.Drawing.Size(37, 13);
+            this.lbMotor.TabIndex = 5;
+            this.lbMotor.Text = "Motor:";
             // 
             // lbTitle
             // 
