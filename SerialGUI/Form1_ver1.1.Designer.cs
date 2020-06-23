@@ -61,12 +61,12 @@
             this.rBtnPosition = new System.Windows.Forms.RadioButton();
             this.rBtnVelocity = new System.Windows.Forms.RadioButton();
             this.tBoxMeasure = new System.Windows.Forms.TextBox();
-            this.tBoxTimeStep = new System.Windows.Forms.TextBox();
+            this.tBoxPWM = new System.Windows.Forms.TextBox();
             this.tbCalib = new System.Windows.Forms.TextBox();
             this.tBoxSetPoint = new System.Windows.Forms.TextBox();
             this.tBoxTime = new System.Windows.Forms.TextBox();
             this.lbCalib = new System.Windows.Forms.Label();
-            this.lbTimeStep = new System.Windows.Forms.Label();
+            this.lbPWM = new System.Windows.Forms.Label();
             this.lbVelocity = new System.Windows.Forms.Label();
             this.lbSetpoint = new System.Windows.Forms.Label();
             this.lbTime = new System.Windows.Forms.Label();
@@ -361,12 +361,12 @@
             this.gBoxMotor.Controls.Add(this.gBoxWhatToMeasure);
             this.gBoxMotor.Controls.Add(this.btnCompact);
             this.gBoxMotor.Controls.Add(this.tBoxMeasure);
-            this.gBoxMotor.Controls.Add(this.tBoxTimeStep);
+            this.gBoxMotor.Controls.Add(this.tBoxPWM);
             this.gBoxMotor.Controls.Add(this.tbCalib);
             this.gBoxMotor.Controls.Add(this.tBoxSetPoint);
             this.gBoxMotor.Controls.Add(this.tBoxTime);
+            this.gBoxMotor.Controls.Add(this.lbPWM);
             this.gBoxMotor.Controls.Add(this.lbCalib);
-            this.gBoxMotor.Controls.Add(this.lbTimeStep);
             this.gBoxMotor.Controls.Add(this.lbVelocity);
             this.gBoxMotor.Controls.Add(this.lbSetpoint);
             this.gBoxMotor.Controls.Add(this.lbTime);
@@ -454,20 +454,19 @@
             // 
             // tBoxMeasure
             // 
-            this.tBoxMeasure.Location = new System.Drawing.Point(87, 221);
+            this.tBoxMeasure.Location = new System.Drawing.Point(87, 195);
             this.tBoxMeasure.Name = "tBoxMeasure";
             this.tBoxMeasure.ReadOnly = true;
             this.tBoxMeasure.Size = new System.Drawing.Size(76, 20);
             this.tBoxMeasure.TabIndex = 6;
             // 
-            // tBoxTimeStep
+            // tBoxPWM
             // 
-            this.tBoxTimeStep.Location = new System.Drawing.Point(87, 143);
-            this.tBoxTimeStep.Name = "tBoxTimeStep";
-            this.tBoxTimeStep.Size = new System.Drawing.Size(76, 20);
-            this.tBoxTimeStep.TabIndex = 6;
-            this.tBoxTimeStep.Text = "0.02";
-            this.tBoxTimeStep.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tBoxTimeStep_KeyDown);
+            this.tBoxPWM.Location = new System.Drawing.Point(87, 221);
+            this.tBoxPWM.Name = "tBoxPWM";
+            this.tBoxPWM.ReadOnly = true;
+            this.tBoxPWM.Size = new System.Drawing.Size(76, 20);
+            this.tBoxPWM.TabIndex = 6;
             // 
             // tbCalib
             // 
@@ -480,7 +479,7 @@
             // 
             // tBoxSetPoint
             // 
-            this.tBoxSetPoint.Location = new System.Drawing.Point(87, 169);
+            this.tBoxSetPoint.Location = new System.Drawing.Point(87, 143);
             this.tBoxSetPoint.Name = "tBoxSetPoint";
             this.tBoxSetPoint.Size = new System.Drawing.Size(76, 20);
             this.tBoxSetPoint.TabIndex = 6;
@@ -488,7 +487,7 @@
             // 
             // tBoxTime
             // 
-            this.tBoxTime.Location = new System.Drawing.Point(87, 195);
+            this.tBoxTime.Location = new System.Drawing.Point(87, 169);
             this.tBoxTime.Name = "tBoxTime";
             this.tBoxTime.ReadOnly = true;
             this.tBoxTime.Size = new System.Drawing.Size(76, 20);
@@ -503,19 +502,19 @@
             this.lbCalib.TabIndex = 5;
             this.lbCalib.Text = "Calib angle coef";
             // 
-            // lbTimeStep
+            // lbPWM
             // 
-            this.lbTimeStep.AutoSize = true;
-            this.lbTimeStep.Location = new System.Drawing.Point(6, 146);
-            this.lbTimeStep.Name = "lbTimeStep";
-            this.lbTimeStep.Size = new System.Drawing.Size(69, 13);
-            this.lbTimeStep.TabIndex = 5;
-            this.lbTimeStep.Text = "Time Step (s)";
+            this.lbPWM.AutoSize = true;
+            this.lbPWM.Location = new System.Drawing.Point(6, 224);
+            this.lbPWM.Name = "lbPWM";
+            this.lbPWM.Size = new System.Drawing.Size(51, 13);
+            this.lbPWM.TabIndex = 5;
+            this.lbPWM.Text = "PWM (%)";
             // 
             // lbVelocity
             // 
             this.lbVelocity.AutoSize = true;
-            this.lbVelocity.Location = new System.Drawing.Point(7, 224);
+            this.lbVelocity.Location = new System.Drawing.Point(7, 198);
             this.lbVelocity.Name = "lbVelocity";
             this.lbVelocity.Size = new System.Drawing.Size(44, 13);
             this.lbVelocity.TabIndex = 5;
@@ -524,7 +523,7 @@
             // lbSetpoint
             // 
             this.lbSetpoint.AutoSize = true;
-            this.lbSetpoint.Location = new System.Drawing.Point(6, 172);
+            this.lbSetpoint.Location = new System.Drawing.Point(6, 146);
             this.lbSetpoint.Name = "lbSetpoint";
             this.lbSetpoint.Size = new System.Drawing.Size(50, 13);
             this.lbSetpoint.TabIndex = 5;
@@ -533,7 +532,7 @@
             // lbTime
             // 
             this.lbTime.AutoSize = true;
-            this.lbTime.Location = new System.Drawing.Point(6, 198);
+            this.lbTime.Location = new System.Drawing.Point(6, 172);
             this.lbTime.Name = "lbTime";
             this.lbTime.Size = new System.Drawing.Size(44, 13);
             this.lbTime.TabIndex = 5;
@@ -578,6 +577,7 @@
             this.tBoxKd.Name = "tBoxKd";
             this.tBoxKd.Size = new System.Drawing.Size(91, 20);
             this.tBoxKd.TabIndex = 6;
+            this.tBoxKd.Text = "0";
             this.tBoxKd.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tBoxKd_KeyDown);
             // 
             // tBoxKi
@@ -586,6 +586,7 @@
             this.tBoxKi.Name = "tBoxKi";
             this.tBoxKi.Size = new System.Drawing.Size(91, 20);
             this.tBoxKi.TabIndex = 6;
+            this.tBoxKi.Text = "4";
             this.tBoxKi.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tBoxKi_KeyDown);
             // 
             // tBoxKp
@@ -594,6 +595,7 @@
             this.tBoxKp.Name = "tBoxKp";
             this.tBoxKp.Size = new System.Drawing.Size(91, 20);
             this.tBoxKp.TabIndex = 6;
+            this.tBoxKp.Text = "0.7";
             this.tBoxKp.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tBoxKp_KeyDown);
             // 
             // lbKp
@@ -801,8 +803,8 @@
         private System.Windows.Forms.Label lbKp;
         private System.Windows.Forms.Button btnMotorStop;
         private System.Windows.Forms.Button btnMotorRun;
-        private System.Windows.Forms.TextBox tBoxTimeStep;
-        private System.Windows.Forms.Label lbTimeStep;
+        private System.Windows.Forms.TextBox tBoxPWM;
+        private System.Windows.Forms.Label lbPWM;
         private System.Windows.Forms.Button btnRequest;
         private System.Windows.Forms.Button btnAbout;
         private System.Windows.Forms.Label lbCalib;

@@ -87,15 +87,13 @@ namespace SerialGUI
 
             RollingPointPairList listPara = new RollingPointPairList(60000);        //Tạo mới danh sách dữ liệu 60000 phần tử, có khả năng cuốn chiếu
             LineItem curvePara = myPanePara.AddCurve("a1", listPara, Color.Red, SymbolType.None);         //Tạo mới đường cong của đồ thị trên GraphPane dựa vào danh sách dữ liệu
-            RollingPointPairList list2Para = new RollingPointPairList(60000);
-            LineItem curve2Para = myPanePara.AddCurve("a2", list2Para, Color.MediumSlateBlue, SymbolType.None);
 
             myPanePara.XAxis.Scale.Min = 0;                         //Đặt giới hạn đồ thị
             myPanePara.XAxis.Scale.Max = 6;
             myPanePara.XAxis.Scale.MinorStep = 0.1;                   //Đặt các bước độ chia
             myPanePara.XAxis.Scale.MajorStep = 1;
-            myPanePara.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
-            myPanePara.YAxis.Scale.Max = 10;
+            myPanePara.YAxis.Scale.Min = -60;                      //Tương tự cho trục y
+            myPanePara.YAxis.Scale.Max = 60;
 
             myPanePara.AxisChange();
 
@@ -198,6 +196,7 @@ namespace SerialGUI
             try
             {
                 clearGraph();
+                logTable.Rows.Clear();
 
                 byte[] setPointBuffer;
                 if (UartCom.TxHandshake(UartCom.ControlHeader.Run, "0", out setPointBuffer))
@@ -266,13 +265,12 @@ namespace SerialGUI
         private void btnAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Nhóm tác giả: \n" +
-                "\t Lý Ngọc Trân Châu\n" +
+                "\t Huỳnh Quốc Kiệt\n" +
                 "\t Nguyễn Hùng Sơn \n" +
-                "\t Lê Xuân Thuyên \n" +
                 "\n" +
                 "Thông số calib bộ điều khiển PID vị trí: \n" +
-                "\t Kp = 0.01 \n" +
-                "\t Ki = 0.001 \n" +
+                "\t Kp = 0.1 \n" +
+                "\t Ki = 0.01 \n" +
                 "\t Kd = 0.0004 \n" +
                 "\t Vận tốc tối đa: 2300 xung / 20ms \n", "About...", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -510,13 +508,13 @@ namespace SerialGUI
                     //xScale.Min = xScale.Max - 6;
                 }
                 // Tự động Scale theo trục y
-                if (Setpoint > yScalePara.Max - yScalePara.MajorStep)          //Nếu datas vượt quá giới hạn trừ 1 MajorStep
+                if (PWM > yScalePara.Max - yScalePara.MajorStep)          //Nếu datas vượt quá giới hạn trừ 1 MajorStep
                 {
-                    yScalePara.Max = Setpoint + yScalePara.MajorStep;          //Thì tăng giới hạn thêm 1 MajorStep
+                    yScalePara.Max = PWM + yScalePara.MajorStep;          //Thì tăng giới hạn thêm 1 MajorStep
                 }
-                else if (Setpoint < yScalePara.Min + yScalePara.MajorStep)
+                else if (PWM < yScalePara.Min + yScalePara.MajorStep)
                 {
-                    yScalePara.Min = Setpoint - yScalePara.MajorStep;
+                    yScalePara.Min = PWM - yScalePara.MajorStep;
                 }
             }
 
@@ -628,14 +626,6 @@ namespace SerialGUI
             }
         }
 
-        private void tBoxTimeStep_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                Realtimestep = Double.Parse(tBoxTimeStep.Text);
-            }
-        }
-
         private void tBoxCalib_KeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -674,6 +664,9 @@ namespace SerialGUI
                     {
                         lbVelocity.Text = "Velocity";
                         tbCalib.Text = "4.8";
+                        tBoxKp.Text = "0.7";
+                        tBoxKi.Text = "4";
+                        tBoxKd.Text = "0";
 
                         GraphPane myPane = zGrphPlotData.GraphPane;
                         myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
@@ -694,6 +687,9 @@ namespace SerialGUI
                     {
                         lbVelocity.Text = "Position";
                         tbCalib.Text = "40";
+                        tBoxKp.Text = "0.1";
+                        tBoxKi.Text = "0.01";
+                        tBoxKd.Text = "0.0004";
 
                         GraphPane myPane = zGrphPlotData.GraphPane;
                         myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
@@ -762,21 +758,19 @@ namespace SerialGUI
 
             // Khởi tạo ZedGraph            
             GraphPane myPanePara = zGraphParameters.GraphPane;      //Tác động các thành phần của Control, (GraphPane)
-            myPanePara.Title.Text = "Tham số";
+            myPanePara.Title.Text = "PWM";
             myPanePara.XAxis.Title.Text = "Thời gian (s)";
             myPanePara.YAxis.Title.Text = "Dữ liệu";
 
             RollingPointPairList listPara = new RollingPointPairList(60000);        //Tạo mới danh sách dữ liệu 60000 phần tử, có khả năng cuốn chiếu
             LineItem curvePara = myPanePara.AddCurve("Giá trị đặt", listPara, Color.Red, SymbolType.None);         //Tạo mới đường cong của đồ thị trên GraphPane dựa vào danh sách dữ liệu
-            RollingPointPairList list2Para = new RollingPointPairList(60000);
-            LineItem curve2Para = myPanePara.AddCurve("Giá trị đo", list2Para, Color.MediumSlateBlue, SymbolType.None);
 
             myPanePara.XAxis.Scale.Min = 0;                         //Đặt giới hạn đồ thị
             myPanePara.XAxis.Scale.Max = 6;
             myPanePara.XAxis.Scale.MinorStep = 0.1;                   //Đặt các bước độ chia
             myPanePara.XAxis.Scale.MajorStep = 1;
-            myPanePara.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
-            myPanePara.YAxis.Scale.Max = 10;
+            //myPanePara.YAxis.Scale.Min = -60;                      //Tương tự cho trục y
+            //myPanePara.YAxis.Scale.Max = 60;
 
             myPanePara.AxisChange();
 
@@ -799,6 +793,14 @@ namespace SerialGUI
         {
             tBoxTime.Text = Realtime.ToString();
             tBoxMeasure.Text = Measure.ToString();
+            if (PWM >= 0)
+            {
+                tBoxPWM.Text = (PWM + 45).ToString();
+            }
+            else
+            {
+                tBoxPWM.Text = (PWM - 45).ToString();
+            }
 
             if (status == GraphStatus.GraphRun)
             {
