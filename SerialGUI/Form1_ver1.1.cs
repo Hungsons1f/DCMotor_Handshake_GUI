@@ -75,7 +75,7 @@ namespace SerialGUI
             myPane.XAxis.Scale.MinorStep = 0.1;                   //Đặt các bước độ chia
             myPane.XAxis.Scale.MajorStep = 1;
             myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
-            myPane.YAxis.Scale.Max = 2500;
+            myPane.YAxis.Scale.Max = 1000;
 
             myPane.AxisChange();
 
@@ -131,6 +131,7 @@ namespace SerialGUI
         {
             try
             {
+                sPort.ReadExisting();
                 sPort.Close();
                 progressBar1.Value = 0;
 
@@ -670,7 +671,7 @@ namespace SerialGUI
 
                         GraphPane myPane = zGrphPlotData.GraphPane;
                         myPane.YAxis.Scale.Min = 0;                      //Tương tự cho trục y
-                        myPane.YAxis.Scale.Max = 2500;
+                        myPane.YAxis.Scale.Max = 1000;
                         myPane.AxisChange();
 
                         //byte[] temp = new byte[1];
@@ -838,6 +839,7 @@ namespace SerialGUI
             }
             else
             {
+                fail = 0;
                 ReTrans.Enabled = false;
             }
         }
